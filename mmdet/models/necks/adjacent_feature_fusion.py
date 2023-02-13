@@ -8,7 +8,7 @@ from torchvision.ops import Conv2dNormActivation
 from ..builder import NECKS
 
 
-@NECKS.register_modules()
+@NECKS.register_module()
 class AdjacentFeatureFusion(nn.Module):
     """
     Implements AdjacentFeatureFusion from the 'Ship Detection in SAR Images Based on Feature Enhancement Swin
