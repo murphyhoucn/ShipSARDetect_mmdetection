@@ -1,6 +1,6 @@
 _base_ = [
     '../_base_/models/faster_rcnn_r50_fpn.py',  # base Faster R-CNN model
-    '../_base_/datasets/ssdd_dataset.py',     # get configuration of the SSDD dataset
+    '../_base_/datasets/ssdd_detection.py',     # get configuration of the SSDD dataset
     '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
 ]
 
