@@ -1,18 +1,19 @@
-# SSDD dataset settings
-classes = ('ship',)
-dataset_type = 'CocoDataset'        # dataset is in the COCO format
-data_root = 'data/SSDD/'            # root dit of the dataset
+# ssdd dataset settings
+classes = ('ship',)  # only one classe in the dataset
+dataset_type = 'CocoDataset'  # dataset is in the COCO format
+data_root = 'data/ssdd/'  # root dir of the dataset
+
 
 img_norm_cfg = dict(
-    mean=[0.1612, 0.1612, 0.1612], std=[0.1696, 0.1696, 0.1696], to_rgb=True)       # normalization to apply
+    mean=[41.106, 41.106, 41.106], std=[43.288, 43.288, 43.288], to_rgb=False)       # normalisation of images
 
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='Resize', img_scale=(672, 672)),     # resize images
-    dict(type='RandomFlip', flip_ratio=0.5),        # do a random flip for data augmentation
+    dict(type='Resize', img_scale=(672, 672), keep_ratio=True),  # resize images
+    # do a random flip with the probability flip_ratio
+    dict(type='RandomFlip', flip_ratio=[0.25, 0.25, 0.25], direction=['horizontal', 'vertical', 'diagonal']),
     dict(type='Normalize', **img_norm_cfg),         # normalization with the find values
-    # dict(type='Pad', size_divisor=32),
     dict(type='DefaultFormatBundle'),
     dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels']),
 ]
@@ -38,21 +39,27 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
+        # explicitly add your class names to the field 'classes'
+        classes=classes,
         ann_file=data_root + 'annotations/train.json',
         img_prefix=data_root + 'images/train',
         pipeline=train_pipeline,
-        classes=classes),
+    ),
     val=dict(
         type=dataset_type,
+        # explicitly add your class names to the field 'classes'
+        classes=classes,
         ann_file=data_root + 'annotations/test.json',
         img_prefix=data_root + 'images/test',
         pipeline=test_pipeline,
-        classes=classes),
+    ),
     test=dict(
         type=dataset_type,
+        # explicitly add your class names to the field 'classes'
+        classes=classes,
         ann_file=data_root + 'annotations/test.json',
         img_prefix=data_root + 'images/test',
         pipeline=test_pipeline,
-        classes=classes))
+    ))
 
-evaluation = dict(interval=1, metric='bbox')
+evaluation = dict(interval=1, metric='bbox')        # do evaluation each epoch
