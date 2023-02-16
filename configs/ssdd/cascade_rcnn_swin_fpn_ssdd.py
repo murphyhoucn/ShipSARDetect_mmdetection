@@ -9,7 +9,7 @@ _base_ = [
 # runner = dict(type='EpochBasedRunner', max_epochs=50)  # set the number of epoch
 
 data = dict(
-    samples_per_gpu=2,      # batch size
+    samples_per_gpu=4,      # batch size
     workers_per_gpu=2,     # number of CPU core to use
 )
 
