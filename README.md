@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="500" height="207" src="resources/logo_ensta.png">
+</p>
+
 ## Introduction
 
 This repo implement different models for ship detection on SAR images. 
