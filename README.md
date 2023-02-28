@@ -52,6 +52,18 @@ All implemented model for SSDD are stored in `config/ssdd/` folder.
 python tools\test.py configs\ssdd\faster_rcnn_r50_fpn_ssdd.py work_dirs\faster_rcnn_r50_fpn_ssdd\latest.pth --show-dir results
 ```
 
+## In development 
+
+In order to implement ESTDNet model from 
+[Ship Detection in SAR Images Based on Feature Enhancement Swin Transformer and Adjacent Feature Fusion](https://www.mdpi.com/1709336)
+article some changes in mmdet library.
+
+**Backbone:** added Feature Enhancement Swin module as `feswin.py` and `feswinv2.py`.
+v2 is based on Swin module of MMDetection whereas the v1 is based on PyTorch one.
+
+**Neck:** added Adjacent Feature Fusion module as `aff.py`
+
+
 ## License
 
 This project is released under the [Apache 2.0 license](LICENSE).
