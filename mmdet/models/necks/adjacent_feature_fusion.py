@@ -23,7 +23,7 @@ class AdjacentFeatureFusion(nn.Module):
     The following code is inspired by the PyTorch version of the FeaturePyramidNetwork.
 
     Args:
-        in_channels_list (list[int]): number of channels for each feature map that is passed to the module
+        in_channels (list[int]): number of channels for each feature map that is passed to the module
         out_channels (int): number of channels of the FPN representation
         norm_layer (callable, optional): Module specifying the normalization layer to use. Default: None
     """
@@ -32,15 +32,15 @@ class AdjacentFeatureFusion(nn.Module):
 
     def __init__(
             self,
-            in_channels_list: List[int],
+            in_channels: List[int],
             out_channels: int,
             norm_layer: Optional[Callable[..., nn.Module]] = None,
     ):
         super().__init__()
-        self.weights = nn.ParameterList([nn.Parameter(Tensor(torch.rand(1))) for i in range(len(in_channels_list) - 1)])
+        self.weights = nn.ParameterList([nn.Parameter(Tensor(torch.rand(1))) for i in range(len(in_channels) - 1)])
         self.inner_blocks = nn.ModuleList()
         self.layer_blocks = nn.ModuleList()
-        for in_channels in in_channels_list:
+        for in_channels in in_channels:
             if in_channels == 0:
                 raise ValueError("in_channels=0 is currently not supported")
             inner_block_module = Conv2dNormActivation(

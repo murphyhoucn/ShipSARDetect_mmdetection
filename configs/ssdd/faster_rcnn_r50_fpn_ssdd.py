@@ -5,14 +5,6 @@ _base_ = [
     '../_base_/default_runtime.py'
 ]
 
-# optimizer = dict(lr=0.001, momentum=0.9, weight_decay=0.0005)      # set the optimizer Learning Rate
-# runner = dict(type='EpochBasedRunner', max_epochs=50)       # set the number of epoch
-
-data = dict(
-    samples_per_gpu=4,      # batch size
-    workers_per_gpu=2,     #
-)
-
 
 model = dict(
     backbone=dict(
@@ -25,6 +17,13 @@ model = dict(
         norm_eval=False,
         style='pytorch',
     ),
+    rpn_head=dict(
+            type='RPNHead',
+            anchor_generator=dict(
+                type='AnchorGenerator',
+                scales=[8, 32, 64, 96],
+                ratios=[0.5, 1.0, 2.0],
+                strides=[4, 8, 16, 32, 64])),
     roi_head=dict(
         bbox_head=dict(
             type='Shared2FCBBoxHead',
@@ -34,18 +33,12 @@ model = dict(
     ),
     train_cfg=dict(
         rpn_proposal=dict(
-            nms=dict(
-                type='nms',
-                iou_threshold=0.5,
-            )
-        ),
+            nms=dict(type='nms', iou_threshold=0.5),
+        )
     ),
     test_cfg=dict(
         rpn=dict(
-            nms=dict(
-                type='nms', 
-                iou_threshold=0.5,
-            )
+            nms=dict(type='nms', iou_threshold=0.5),
         ),
     )
 )

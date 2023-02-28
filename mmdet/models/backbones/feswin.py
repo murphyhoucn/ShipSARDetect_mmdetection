@@ -1,6 +1,7 @@
 from functools import partial
 from typing import Callable, List, Optional
 
+from mmcv.utils import to_2tuple
 from torch import nn, Tensor
 from torchvision.models.swin_transformer import SwinTransformerBlock, PatchMerging
 from torchvision.ops import Permute
@@ -15,10 +16,20 @@ class FeatureEnhancement(nn.Module):
 
     Args:
         dim (int): Number of input channels
+        img_size (int | tuple[int]): The size of input image
     """
 
     def __init__(self, dim: int, img_size: int, norm_layer: Callable[..., nn.Module] = nn.LayerNorm):
         super().__init__()
+        if isinstance(img_size, int):
+            img_size = to_2tuple(img_size)
+        elif isinstance(img_size, tuple):
+            if len(img_size) == 1:
+                img_size = to_2tuple(img_size[0])
+            assert len(img_size) == 2, \
+                f'The size of image should have length 1 or 2, ' \
+                f'but got {len(img_size)}'
+
         self.channel_information_integration = nn.Sequential(
             nn.Conv2d(in_channels=dim, out_channels=dim // 4, kernel_size=(1, 1)),
             norm_layer([dim // 4, img_size, img_size]),
@@ -40,10 +51,10 @@ class FeatureEnhancement(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         """
         Args:
-            x (Tensor): input tensor with expected layout of [..., H, W, C]. It is already the result of the feature fusion
+            x (Tensor): input tensor with expected layout of [*, H, W, C]. It is already the result of the feature fusion
 
         Returns:
-            Tensor with layout of [..., H/2, W/2, 2*C]
+            Tensor with layout of [*, H/2, W/2, 2*C]
         """
         x = x.permute([0, 3, 1, 2])
         c = self.channel_information_integration(x)  # channel information integration
@@ -87,7 +98,8 @@ class FESwin(nn.Module):
             mlp_ratio: float = 4.0,
             dropout: float = 0.0,
             attention_dropout: float = 0.0,
-            stochastic_depth_prob: float = 0.1,init_cfg=None,
+            stochastic_depth_prob: float = 0.1,
+            init_cfg=None,
             num_classes: int = 1000,
             norm_layer: Optional[Callable[..., nn.Module]] = None,
             block: Optional[Callable[..., nn.Module]] = None,
@@ -177,5 +189,5 @@ class FESwin(nn.Module):
             # x_stages.append(self.permute(x))
         return x_stages
 
-    def init_weights(self, pretrained=None):
-        raise (NotImplementedError("No weights found"))
+    # def init_weights(self, pretrained=None):
+    #     raise (NotImplementedError("No weights found"))

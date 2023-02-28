@@ -7,6 +7,13 @@ _base_ = [
 
 
 model = dict(
+    rpn_head=dict(
+        type='RPNHead',
+        anchor_generator=dict(
+            type='AnchorGenerator',
+            scales=[8, 32, 64, 96],
+            ratios=[0.5, 1.0, 2.0],
+            strides=[4, 8, 16, 32, 64])),
     roi_head=dict(
         bbox_head=dict(
             type='Shared2FCBBoxHead',
@@ -16,18 +23,12 @@ model = dict(
     ),
     train_cfg=dict(
         rpn_proposal=dict(
-            nms=dict(
-                type='nms',
-                iou_threshold=0.5,
-            )
-        ),
+            nms=dict(type='nms', iou_threshold=0.5),
+        )
     ),
     test_cfg=dict(
         rpn=dict(
-            nms=dict(
-                type='nms', 
-                iou_threshold=0.5,
-            )
+            nms=dict(type='nms', iou_threshold=0.5),
         ),
     )
 )

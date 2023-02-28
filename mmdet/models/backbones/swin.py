@@ -506,7 +506,7 @@ class SwinTransformer(BaseModule):
         act_cfg (dict): Config dict for activation layer.
             Default: dict(type='GELU').
         norm_cfg (dict): Config dict for normalization layer at
-            output of backone. Defaults: dict(type='LN').
+            output of backbone. Defaults: dict(type='LN').
         with_cp (bool, optional): Use checkpoint or not. Using checkpoint
             will save some memory while slowing down the training speed.
             Default: False.
