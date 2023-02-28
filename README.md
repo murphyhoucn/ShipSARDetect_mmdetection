@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This repo implement different models for ship detection on SAR images. 
+This repository implements some deep-learning models for ship detection on SAR images. 
 All models are developed to work with the [Ship SAR Detection Dataset (SSDD)](https://github.com/TianwenZhang0825/Official-SSDD).
 
 Moreover, the following work is based on the [OpenMMLab Detection Toolbox and Benchmark](https://github.com/open-mmlab/mmdetection).
